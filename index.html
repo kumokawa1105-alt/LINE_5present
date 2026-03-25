@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>特典受け取りページ｜AI活用支援</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #ffffff;
+    --surface2: #fff5f5;
+    --red: #c0392b;
+    --red-light: #e74c3c;
+    --red-dim: #e57373;
+    --text: #1a1a1a;
+    --text-dim: #6b6b6b;
+    --border: #e5e5e5;
+    --border-red: rgba(192,57,43,0.22);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: 400;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .wrapper {
+    position: relative;
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 60px 24px 100px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 56px;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .header h1 {
+    font-weight: 900;
+    font-size: clamp(26px, 6vw, 42px);
+    line-height: 1.25;
+    letter-spacing: 0.04em;
+    color: var(--red);
+    margin-bottom: 20px;
+  }
+
+  .header p {
+    font-size: 14px;
+    color: var(--text-dim);
+    line-height: 1.8;
+    letter-spacing: 0.05em;
+  }
+
+  .divider {
+    width: 48px;
+    height: 2px;
+    background: var(--red);
+    margin: 20px auto;
+    border-radius: 2px;
+  }
+
+  .cards {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 48px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 24px 28px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
+    animation: fadeUp 0.7s ease both;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+  }
+
+  .card:nth-child(1) { animation-delay: 0.1s; }
+  .card:nth-child(2) { animation-delay: 0.2s; }
+  .card:nth-child(3) { animation-delay: 0.3s; }
+  .card:nth-child(4) { animation-delay: 0.4s; }
+  .card:nth-child(5) { animation-delay: 0.5s; }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--red);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover {
+    border-color: var(--border-red);
+    transform: translateX(4px);
+    box-shadow: -4px 0 20px rgba(192,57,43,0.08), 0 4px 16px rgba(0,0,0,0.07);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-num {
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--red);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .card-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .card-title {
+    font-weight: 700;
+    font-size: clamp(15px, 3vw, 19px);
+    line-height: 1.5;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    margin-bottom: 5px;
+  }
+
+  .card-sub {
+    font-size: 13px;
+    color: var(--text-dim);
+    letter-spacing: 0.03em;
+  }
+
+  .card-arrow {
+    flex-shrink: 0;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--border-red);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--red-dim);
+    font-size: 13px;
+    transition: all 0.3s;
+  }
+
+  .card:hover .card-arrow {
+    border-color: var(--red);
+    color: var(--red);
+    transform: translateX(3px);
+  }
+
+  .limit-badge {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    background: rgba(192,57,43,0.08);
+    color: var(--red);
+    border: 1px solid var(--border-red);
+    padding: 2px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .card-points {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 10px 0 10px;
+  }
+
+  .point {
+    font-size: 13px;
+    color: var(--text);
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+  }
+
+  .card-catch {
+    font-size: 12px;
+    color: var(--red);
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1.7;
+    border-top: 1px dashed rgba(192,57,43,0.25);
+    padding-top: 10px;
+    margin-top: 4px;
+  }
+
+  .cta-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 36px;
+    background: var(--red);
+    color: #fff;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    border-radius: 4px;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 16px rgba(192,57,43,0.25);
+  }
+
+  .cta-btn:hover {
+    background: var(--red-light);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(192,57,43,0.3);
+  }
+
+  .notice {
+    background: var(--surface2);
+    border: 1px solid var(--border-red);
+    border-radius: 6px;
+    padding: 24px 28px;
+    text-align: center;
+    animation: fadeUp 0.7s 0.6s ease both;
+  }
+
+  .notice-icon {
+    font-size: 20px;
+    margin-bottom: 10px;
+    display: block;
+  }
+
+  .notice p {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.9;
+    letter-spacing: 0.04em;
+  }
+
+  .notice strong {
+    color: var(--text);
+    font-weight: 700;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 56px;
+    padding-top: 28px;
+    border-top: 1px solid #e5e5e5;
+    animation: fadeUp 0.7s 0.7s ease both;
+  }
+
+  .footer p {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 520px) {
+    .card { padding: 18px 20px; gap: 14px; }
+    .card-arrow { display: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <h1>特典受け取りページ</h1>
+    <div class="divider"></div>
+    <p>ご登録ありがとうございます。<br>以下の5つの特典をご確認ください。</p>
+  </div>
+
+  <div class="cards">
+
+    <a href="https://docs.google.com/spreadsheets/d/1xFiAqj-HwGINK1SE7XOBnp9FBO3fnFmq/edit?usp=share_link&ouid=102902120539101915326&rtpof=true&sd=true" class="card" target="_blank">
+      <div class="card-num">特典①</div>
+      <div class="card-body">
+        <div class="card-title">経営者のためのAI活用チェックリスト20選</div>
+        <div class="card-sub">すぐに実践できる20のチェック項目</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="https://docs.google.com/spreadsheets/d/1-jHufY_qwp2JSFnGt952AAgcnMbQxSou/edit?usp=share_link&ouid=102902120539101915326&rtpof=true&sd=true" class="card" target="_blank">
+      <div class="card-num">特典②</div>
+      <div class="card-body">
+        <div class="card-title">すぐ使えるChatGPTプロンプトテンプレート集10選</div>
+        <div class="card-sub">コピーしてすぐに活用できるテンプレート</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="https://docs.google.com/spreadsheets/d/1pny_YUT8WZiOLkM7NQn8saCktCZMcjui/edit?usp=share_link&ouid=102902120539101915326&rtpof=true&sd=true" class="card" target="_blank">
+      <div class="card-num">特典③</div>
+      <div class="card-body">
+        <div class="card-title">すぐ使えるGeminiプロンプトテンプレート集10選</div>
+        <div class="card-sub">Gemini専用の厳選テンプレート10点</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="https://docs.google.com/spreadsheets/d/15KtJK1zotUbcsfptWCfZvgPpc1Hq9ITK/edit?usp=sharing&ouid=102902120539101915326&rtpof=true&sd=true" class="card" target="_blank">
+      <div class="card-num">特典④</div>
+      <div class="card-body">
+        <div class="card-title">業種別AI活用事例レポート</div>
+        <div class="card-sub">業種ごとの具体的な導入・活用事例をまとめたレポート</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+    <a href="https://forms.gle/ucWZdoAdRgsrqQ8p9" class="card special" target="_blank">
+      <div class="card-num">特典⑤</div>
+      <div class="card-body">
+        <div class="card-title">
+          30分 Zoom 無料相談
+          <span class="limit-badge">毎月先着10社限定</span>
+        </div>
+        <div class="card-points">
+          <div class="point">✅ AI導入の進め方・費用感をその場で回答</div>
+          <div class="point">✅ 社内研修の内容・スケジュールをご提案</div>
+          <div class="point">✅ 貴社の業種・規模に合った活用法をご紹介</div>
+          <div class="point">✅ 「何から始めればいい？」にお答えします</div>
+        </div>
+        <div class="card-catch">相談後の押し売り・営業は一切ありません。<br>まずはお気軽にお話しください。</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+
+  </div>
+
+  <div class="notice">
+    <p>
+      <strong>「AI、気になるけど何から手をつければ？」そのお悩み、30分で解決します。</strong><br>
+      導入実績をもとに、貴社にとって最適なAI活用の第一歩をご提案します。<br>
+      枠に限りがありますので、お早めにご予約ください。
+    </p>
+    <a href="https://forms.gle/ucWZdoAdRgsrqQ8p9" class="cta-btn" target="_blank">無料相談を予約する →</a>
+  </div>
+
+  <div class="footer">
+    <p>© AI studio</p>
+  </div>
+
+</div>
+</body>
+</html>
